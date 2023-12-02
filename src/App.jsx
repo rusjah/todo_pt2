@@ -8,8 +8,11 @@ import Footer from './components/layout/Footer';
 import Login from './components/pages/Login';
 import Registration from './components/pages/Registration'
 import TodoList from './components/pages/TodoList';
+import { useAppContext } from './contex/AppContext';
+import OneList from './components/pages/OneList';
 
 function App() {
+  const {typeList} = useAppContext()
   return (
     <div className="App">
       <Nav />
@@ -19,6 +22,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/registration' element={<Registration />} />
           <Route path='/todoList' element={<TodoList />} />
+          <Route path={`/${typeList}`} element={<OneList />} />
         </Routes>
       </main>
       <Footer />

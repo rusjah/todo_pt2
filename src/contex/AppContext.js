@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Backendless from "backendless";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -6,6 +6,14 @@ import { toast } from 'react-toastify';
 const AppContext = createContext()
 
 export const AppProvider = ({children}) => {
+    const [todos, settodos] = useState([])
+    // const [todayTodos, setTodayTodos] = useState([])
+    const [doFirst, setDoFirst] = useState([])
+    const [delegate, setDelegate] = useState([])
+    const [eliminate, setEliminate] = useState([])
+    const [doLater, setDoLater] = useState([])
+    const [typeList, setTypeList] = useState('doFirst')
+    
     const navigate = useNavigate()
     const [authorization, setAuthorization] = useState(false)
 
@@ -59,10 +67,55 @@ export const AppProvider = ({children}) => {
         .catch( err => {console.log(err)} );
     }
 
+    //to do
+    function addTodo(obj) {
+        // Backendless.Data.of( "todos" ).save( obj )
+        //     .then(res => console.log(res))
+        //     .catch(err => console.log(err));
+        settodos(i => [...i, obj])
+
+    }
+
+    function displayTodo(type) {
+        switch (type) {
+            case 'doFirst':
+                return doFirst
+            case 'doLater':
+                return doLater
+            case 'delegate':
+                return delegate
+            case 'eliminate':
+                return eliminate
+            default:
+                return todos
+        }
+    }
+
+    function typeOfList(type) {
+        setTypeList(i => setTypeList)
+        navigate(`/${type}`)
+    }
+
+    useEffect(() => {
+        const doFirst = todos.filter(i => i.type == 'doFirst');
+        const doLater = todos.filter(i => i.type === 'doLater')
+        const delegate = todos.filter(i => i.type === 'delegate')
+        const eliminate = todos.filter(i => i.type === 'eliminate')
+
+        setDoFirst(i => doFirst)
+        setDoLater(i => doLater)
+        setDelegate(i => delegate)
+        setEliminate(i => eliminate)
+
+    }, [todos])
+   
+
 
     return <AppContext.Provider value={{
         authorization, setAuthorization,
-        registration, logoutUser, loginUser
+        registration, logoutUser, loginUser,
+        addTodo, displayTodo,
+        typeList, typeOfList
         }}>
         {children}
     </AppContext.Provider>
