@@ -1,9 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Nav from './components/components/Nav';
 import StartPage from './components/pages/StartPage';
 import Footer from './components/layout/Footer';
 import Login from './components/pages/Login';
+import Registration from './components/pages/Registration'
+import TodoList from './components/pages/TodoList';
 
 function App() {
   return (
@@ -13,9 +17,12 @@ function App() {
         <Routes>
           <Route path='/' element={<StartPage />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/registration' element={<Registration />} />
+          <Route path='/todoList' element={<TodoList />} />
         </Routes>
       </main>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
