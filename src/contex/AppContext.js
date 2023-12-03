@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Backendless from "backendless";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import axios from "axios";
 
 const AppContext = createContext()
 
@@ -13,9 +14,17 @@ export const AppProvider = ({children}) => {
     const [eliminate, setEliminate] = useState([])
     const [doLater, setDoLater] = useState([])
     const [typeList, setTypeList] = useState('doFirst')
+    const [editStatus, setEditStatus] = useState(false)
     
     const navigate = useNavigate()
     const [authorization, setAuthorization] = useState(false)
+
+    const heading = {
+        doFirst: 'Urgant and Import',
+        delegate: 'Not urgent but import',
+        eliminate: 'Neither Urgen or importent',
+        doLater: 'Urgent but not importent'
+    }
 
     //work with backendless
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -56,8 +65,6 @@ export const AppProvider = ({children}) => {
     function loginUser(userData) {
         const email = userData.email
         const password = userData.password
-        console.log(email);
-        console.log(password);
         Backendless.UserService.login( `${email}`, `${password}`, true )
         .then( res => {
             setAuthorization(i => true)
@@ -67,13 +74,43 @@ export const AppProvider = ({children}) => {
         .catch( err => {console.log(err)} );
     }
 
+    useEffect(() => {
+        Backendless.UserService.isValidLogin()
+        .then( res =>  setAuthorization(i => res) )
+        .catch( err => console.log(err));
+
+    }, [])
+    
     //to do
     function addTodo(obj) {
-        // Backendless.Data.of( "todos" ).save( obj )
-        //     .then(res => console.log(res))
-        //     .catch(err => console.log(err));
-        settodos(i => [...i, obj])
+        Backendless.Data.of( "todos" ).save( obj )
+            .then(res => {
+                settodos(i => [...i, obj])
+            })
+            .catch(err => console.log(err));
 
+    }
+
+    function getList() {
+        Backendless.Data.of('todos').find()
+            .then(res => {
+                console.log(res);
+                settodos(res)
+            })
+            .catch(err => console.log(err))
+    }
+
+    function deleteTodo(id) {
+        Backendless.Data.of( "todos" ).remove(  {objectId:`${id}`} )
+        .then(res => {
+            getList();
+            console.log('success')
+        })
+        .catch( err => console.log(err));
+    }
+
+    function updateTodo() {
+        alert('hi')
     }
 
     function displayTodo(type) {
@@ -92,7 +129,7 @@ export const AppProvider = ({children}) => {
     }
 
     function typeOfList(type) {
-        setTypeList(i => setTypeList)
+        setTypeList(i => type)
         navigate(`/${type}`)
     }
 
@@ -108,14 +145,17 @@ export const AppProvider = ({children}) => {
         setEliminate(i => eliminate)
 
     }, [todos])
-   
 
+    useEffect(() => {
+        getList()
+    },[])
 
     return <AppContext.Provider value={{
         authorization, setAuthorization,
         registration, logoutUser, loginUser,
         addTodo, displayTodo,
-        typeList, typeOfList
+        typeList, typeOfList, heading,
+        getList, deleteTodo, updateTodo
         }}>
         {children}
     </AppContext.Provider>
