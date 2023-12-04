@@ -14,7 +14,7 @@ function Nav() {
        {authorization &&  <div className="flex-none">
                             <ul className="menu menu-horizontal px-1">
                             <Link to={'/todoList'}> <li><a>My todos</a></li></Link>
-                            <Link><li><a>Complated</a></li></Link>
+                            <Link to={'/complated'}><li><a>Complated</a></li></Link>
                             <Link to={'/'} onClick={logoutUser}><li><a>Log out</a></li></Link>
                             </ul>
                           </div>}

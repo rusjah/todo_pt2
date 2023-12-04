@@ -13,6 +13,7 @@ export const AppProvider = ({children}) => {
     const [delegate, setDelegate] = useState([])
     const [eliminate, setEliminate] = useState([])
     const [doLater, setDoLater] = useState([])
+    const [done, setDone] = useState([])
     const [typeList, setTypeList] = useState('doFirst')
     const [changeInput, setchangeInput] = useState('');
 
@@ -166,6 +167,8 @@ export const AppProvider = ({children}) => {
                 return delegate
             case 'eliminate':
                 return eliminate
+            case 'done':
+                return done
             default:
                 return todos
         }
@@ -179,15 +182,17 @@ export const AppProvider = ({children}) => {
     }
 
     useEffect(() => {
-        const doFirst = todos.filter(i => i.type == 'doFirst');
-        const doLater = todos.filter(i => i.type === 'doLater')
-        const delegate = todos.filter(i => i.type === 'delegate')
-        const eliminate = todos.filter(i => i.type === 'eliminate')
+        const doFirst = todos.filter(i => i.type == 'doFirst' && i.status === 'aktive');
+        const doLater = todos.filter(i => i.type === 'doLater'  && i.status === 'aktive')
+        const delegate = todos.filter(i => i.type === 'delegate'  && i.status === 'aktive')
+        const eliminate = todos.filter(i => i.type === 'eliminate'  && i.status === 'aktive')
+        const done = todos.filter(i => i.status === 'done')
 
         setDoFirst(i => doFirst)
         setDoLater(i => doLater)
         setDelegate(i => delegate)
         setEliminate(i => eliminate)
+        setDone(i => done);
 
         console.log('useeffectwithtodo');
 

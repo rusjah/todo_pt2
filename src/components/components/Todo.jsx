@@ -24,7 +24,7 @@ function Todo({oneTodo}) {
             </>}
             {!oneTodo.editStatus && <>
               <DeleteBtn id={oneTodo.objectId} />
-              <StatusTodo id={oneTodo.objectId}/>
+              {oneTodo.status === 'aktive' && <StatusTodo id={oneTodo.objectId}/>}
             </>}
         </div>
     </div>

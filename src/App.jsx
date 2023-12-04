@@ -10,6 +10,7 @@ import Registration from './components/pages/Registration'
 import TodoList from './components/pages/TodoList';
 import { useAppContext } from './contex/AppContext';
 import OneList from './components/pages/OneList';
+import Complated from './components/pages/Complated';
 
 function App() {
   const {typeList} = useAppContext()
@@ -23,7 +24,7 @@ function App() {
           <Route path='/registration' element={<Registration />} />
           <Route path='/todoList' element={<TodoList />} />
           <Route path={`/${typeList}`} element={<OneList />} />
-          <Route path='/complated' />
+          <Route path='/complated' element={<Complated />}/>
         </Routes>
       </main>
       <Footer />
