@@ -2,6 +2,7 @@ import React from 'react'
 import DeleteBtn from './DeleteBtn'
 import { useAppContext } from '../../contex/AppContext'
 import InputField from './InputField';
+import StatusTodo from './StatusTodo';
 
 
 function Todo({oneTodo}) {
@@ -21,7 +22,10 @@ function Todo({oneTodo}) {
               </div>
             }
             </>}
-           <DeleteBtn id={oneTodo.objectId} />
+            {!oneTodo.editStatus && <>
+              <DeleteBtn id={oneTodo.objectId} />
+              <StatusTodo id={oneTodo.objectId}/>
+            </>}
         </div>
     </div>
   )

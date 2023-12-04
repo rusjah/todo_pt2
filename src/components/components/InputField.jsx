@@ -26,7 +26,6 @@ function InputField({submitType, el}) {
           type: e.target.type.value,
           todo: e.target.todo.value
         }
-        // e.target.todo.value = ''
         updateTodo(todoNew)
       }
   }

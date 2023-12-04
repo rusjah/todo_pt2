@@ -143,9 +143,17 @@ export const AppProvider = ({children}) => {
         .catch(err => console.log(err));
     }
 
-    function onChangeHandler(e) {
-        setchangeInput(i => e.target.value)
+    function changeTaskStatus(id, newStatus) {
+        Backendless.Data.of( "todos" ).save( { objectId: `${id}`, status: `${newStatus}`} )
+        .then(res => {
+            getList();
+        })
+        .catch(err => console.log(err));
     }
+
+    // function onChangeHandler(e) {
+    //     setchangeInput(i => e.target.value)
+    // }
 
 
     function displayTodo(type) {
@@ -196,8 +204,7 @@ export const AppProvider = ({children}) => {
         addTodo, displayTodo,
         typeList, typeOfList, heading,
         getList, deleteTodo, 
-        changeEditStatus,
-        updateTodo, onChangeHandler, changeInput
+        changeEditStatus, updateTodo, changeTaskStatus
         }}>
         {children}
     </AppContext.Provider>

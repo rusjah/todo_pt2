@@ -23,6 +23,7 @@ function App() {
           <Route path='/registration' element={<Registration />} />
           <Route path='/todoList' element={<TodoList />} />
           <Route path={`/${typeList}`} element={<OneList />} />
+          <Route path='/complated' />
         </Routes>
       </main>
       <Footer />
