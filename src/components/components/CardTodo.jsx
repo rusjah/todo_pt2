@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 function CardTodo({myStyle, content, type}) {
-    const {typeOfList} = useAppContext()
+    const {typeOfList, displayTodo} = useAppContext()
 
     // `/${typeList}`
   return (
@@ -13,6 +13,7 @@ function CardTodo({myStyle, content, type}) {
           <div className="card-body">
               <h2 className="card-title">{content}</h2>
               <div className="card-actions justify-end">
+              <p className='font-bold'> {displayTodo(type).length}</p>
               <button onClick={() => {typeOfList(type)}} className="btn bg-yellow-950 text-white">Check List</button>
               </div>
           </div>
