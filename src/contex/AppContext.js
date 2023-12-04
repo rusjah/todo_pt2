@@ -13,7 +13,7 @@ export const AppProvider = ({children}) => {
     const [delegate, setDelegate] = useState([])
     const [eliminate, setEliminate] = useState([])
     const [doLater, setDoLater] = useState([])
-    const [done, setDone] = useState([])
+    let [done, setDone] = useState([])
     const [typeList, setTypeList] = useState('doFirst')
     const [changeInput, setchangeInput] = useState('');
 
@@ -152,6 +152,17 @@ export const AppProvider = ({children}) => {
         .catch(err => console.log(err));
     }
 
+    function removeAll() {
+        done.forEach(el => {
+            Backendless.Data.of( "todos" ).remove( {objectId: el.objectId} )
+            .then(res => {
+                getList();
+                console.log('success')
+            })
+            .catch( err => console.log(err));
+        })
+    }
+
     // function onChangeHandler(e) {
     //     setchangeInput(i => e.target.value)
     // }
@@ -209,7 +220,8 @@ export const AppProvider = ({children}) => {
         addTodo, displayTodo,
         typeList, typeOfList, heading,
         getList, deleteTodo, 
-        changeEditStatus, updateTodo, changeTaskStatus
+        changeEditStatus, updateTodo, changeTaskStatus,
+        removeAll
         }}>
         {children}
     </AppContext.Provider>

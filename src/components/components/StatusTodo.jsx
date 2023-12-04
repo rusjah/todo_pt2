@@ -4,12 +4,18 @@ import { useAppContext } from '../../contex/AppContext';
 function StatusTodo({id}) {
     const {changeTaskStatus} = useAppContext()
     function onChangeHundler(e) {
+        console.log('cheked before', e.target.checked);
         if (e.target.checked) {
             changeTaskStatus(id, 'done')
         } else {
             changeTaskStatus(id, 'aktive')
         }
-        // e.target.checked = false
+        setTimeout(() => {
+            e.target.checked = false
+        },500)
+
+        console.log('cheked after', e.target.checked);
+
     }
   return (
     <div className="form-control">
