@@ -1,19 +1,26 @@
 import React from 'react'
 import DeleteBtn from './DeleteBtn'
-import CheckBtn from './CheckBtn'
 import { useAppContext } from '../../contex/AppContext'
+import InputField from './InputField';
 
 
 function Todo({oneTodo}) {
-  const {updateTodo} = useAppContext();
+  const {changeEditStatus, onChangeHandler} = useAppContext();
 
   return (
     <div className="card w-full  shadow-xl border-2 border-orange-300">
-        
+
         <div className="card-body realtiv">
-            <h2 className="card-title">{oneTodo.todo}</h2>
-            <p className='text-[10px] font-bold text-amber-950'>{oneTodo.date_todo}{oneTodo.time}</p>
-            {/* <p className='pt-4 text-red-950'>todo.time</p> */}
+
+          { !oneTodo.editStatus ? <>
+            <h2  onClick={() => {changeEditStatus(oneTodo.objectId, oneTodo.editStatus)}} className="card-title">{oneTodo.todo}</h2> 
+            <p className='text-[10px] font-bold text-amber-950'>{oneTodo.date_todo} {oneTodo.time}</p>
+            </> : <>
+            { oneTodo.editStatus && <div className='flex flex-col items-center gap-4'> 
+                <InputField submitType={'edit'} el={oneTodo}/>
+              </div>
+            }
+            </>}
            <DeleteBtn id={oneTodo.objectId} />
         </div>
     </div>

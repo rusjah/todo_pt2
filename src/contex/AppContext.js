@@ -14,7 +14,9 @@ export const AppProvider = ({children}) => {
     const [eliminate, setEliminate] = useState([])
     const [doLater, setDoLater] = useState([])
     const [typeList, setTypeList] = useState('doFirst')
-    const [editStatus, setEditStatus] = useState(false)
+    const [changeInput, setchangeInput] = useState('');
+
+    // const [editStatus, setEditStatus] = useState(false)
     
     const navigate = useNavigate()
     const [authorization, setAuthorization] = useState(false)
@@ -27,8 +29,8 @@ export const AppProvider = ({children}) => {
     }
 
     //work with backendless
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    const APL_ID = process.env.REACT_APP_APL_ID;
+    const API_KEY = process.env.REACT_APP_API_KEY_PT;
+    const APL_ID = process.env.REACT_APP_APL_ID_PT;
 
     Backendless.serverURL = "https://eu-api.backendless.com"
     Backendless.initApp( APL_ID, API_KEY );
@@ -46,6 +48,7 @@ export const AppProvider = ({children}) => {
                 console.log('registar', res);
             } )
             .catch( err => {
+                console.log('resgi', err.code);
                 if (err.code === 3033) {
                     toast("You already have account! Please, Log In");
                     navigate('/login')
@@ -80,14 +83,19 @@ export const AppProvider = ({children}) => {
         .catch( err => console.log(err));
 
     }, [])
+
+
     
     //to do
     function addTodo(obj) {
+        
         Backendless.Data.of( "todos" ).save( obj )
             .then(res => {
-                settodos(i => [...i, obj])
+                settodos(i => [...i, res])
             })
             .catch(err => console.log(err));
+
+        console.log('addTodo');
 
     }
 
@@ -98,20 +106,47 @@ export const AppProvider = ({children}) => {
                 settodos(res)
             })
             .catch(err => console.log(err))
+        
+        console.log('getTodo');
+
     }
 
     function deleteTodo(id) {
+        console.log('obj.', id);
         Backendless.Data.of( "todos" ).remove(  {objectId:`${id}`} )
         .then(res => {
             getList();
             console.log('success')
         })
         .catch( err => console.log(err));
+    
+        console.log('deleteTodo');
+
     }
 
-    function updateTodo() {
-        alert('hi')
+    function changeEditStatus(id, status) {
+        console.log(id, status);
+        Backendless.Data.of( "todos" ).save( { objectId: `${id}`, editStatus: !status} )
+        .then(res => {
+            getList();
+        })
+        .catch(err => console.log(err));
     }
+
+    function updateTodo(obj) {
+        console.log('changed', changeInput);
+        Backendless.Data.of( "todos" ).save(obj)
+        .then(res => {
+            setchangeInput(i => '')
+            getList();
+        })
+        .catch(err => console.log(err));
+    }
+
+    function onChangeHandler(e) {
+        setchangeInput(i => e.target.value)
+    }
+
 
     function displayTodo(type) {
         switch (type) {
@@ -131,6 +166,8 @@ export const AppProvider = ({children}) => {
     function typeOfList(type) {
         setTypeList(i => type)
         navigate(`/${type}`)
+        console.log('tipeoflist');
+
     }
 
     useEffect(() => {
@@ -144,10 +181,13 @@ export const AppProvider = ({children}) => {
         setDelegate(i => delegate)
         setEliminate(i => eliminate)
 
+        console.log('useeffectwithtodo');
+
     }, [todos])
 
     useEffect(() => {
         getList()
+        console.log('useefOnce');
     },[])
 
     return <AppContext.Provider value={{
@@ -155,7 +195,9 @@ export const AppProvider = ({children}) => {
         registration, logoutUser, loginUser,
         addTodo, displayTodo,
         typeList, typeOfList, heading,
-        getList, deleteTodo, updateTodo
+        getList, deleteTodo, 
+        changeEditStatus,
+        updateTodo, onChangeHandler, changeInput
         }}>
         {children}
     </AppContext.Provider>
